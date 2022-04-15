@@ -36,14 +36,12 @@ public class CommandBufferTest : MonoBehaviour
         cmd.SetRenderTarget(rt);
         cmd.ClearRenderTarget(true,true,Color.clear);
         
-        var gos = GameObject.FindObjectsOfType(typeof(GameObject));
-        foreach (var _go in gos)
+        var objs = GameObject.FindObjectsOfType(typeof(Renderer));
+        foreach (var o in objs)
         {
-           var go = _go as GameObject;
-           var render = go.GetComponent<Renderer>();
+           var render = o as Renderer;
            if(render==null)
                continue;
-           Debug.LogError("---");
             cmd.DrawRenderer(render,cmdMaterial);//todo
         }
         
@@ -52,7 +50,7 @@ public class CommandBufferTest : MonoBehaviour
         // cmd.Blit(BuiltinRenderTextureType.CurrentActive,
         //     ShaderManager.GlobalShaderIds.CustomDepthTexture);
         Shader.SetGlobalTexture(ShaderManager.GlobalShaderIds.CustomDepthTexture,rt);
-        
+           
     }
 
     public void RemoveCommandBuffer()

@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Test : MonoBehaviour
 {
@@ -14,6 +16,7 @@ public class Test : MonoBehaviour
     public int objCount = 100;
     MaterialPropertyBlock prop = null;
     void Start () {
+        
         colorID = Shader.PropertyToID("_Color");
         prop = new MaterialPropertyBlock();
         var obj = Resources.Load("Sphere") as GameObject;
