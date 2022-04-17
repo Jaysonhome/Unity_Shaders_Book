@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Serialization;
 
-public class MotionBlurWithDepthTexture : PostEffectsBase {
+public class SSAOWithDepthTexture : PostEffectsBase {
 
-	public Shader motionBlurShader;
-	private Material motionBlurMaterial = null;
+	public Shader ssaoShader;
+	private Material ssaoMaterial = null;
 
 	public Material material {  
 		get {
-			motionBlurMaterial = CheckShaderAndCreateMaterial(motionBlurShader, motionBlurMaterial);
-			return motionBlurMaterial;
+			ssaoMaterial = CheckShaderAndCreateMaterial(ssaoShader, ssaoMaterial);
+			return ssaoMaterial;
 		}  
 	}
 
@@ -23,8 +24,8 @@ public class MotionBlurWithDepthTexture : PostEffectsBase {
 		}
 	}
 
-	[Range(0.0f, 1.0f)]
-	public float blurSize = 0.5f;
+	[Range(0.0f, 2.0f)]
+	public float size = 0.5f;
 
 	private Matrix4x4 previousViewProjectionMatrix;
 	
@@ -33,10 +34,10 @@ public class MotionBlurWithDepthTexture : PostEffectsBase {
 
 		previousViewProjectionMatrix = camera.projectionMatrix * camera.worldToCameraMatrix;
 	}
-
+	
 	void OnRenderImage (RenderTexture src, RenderTexture dest) {
 		if (material != null) {
-			material.SetFloat("_BlurSize", blurSize);
+			material.SetFloat("_Size", size);
 
 			material.SetMatrix("_PreviousViewProjectionMatrix", previousViewProjectionMatrix);
 			Matrix4x4 currentViewProjectionMatrix = camera.projectionMatrix * camera.worldToCameraMatrix;
