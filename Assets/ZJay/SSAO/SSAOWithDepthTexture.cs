@@ -24,9 +24,16 @@ public class SSAOWithDepthTexture : PostEffectsBase {
 		}
 	}
 
-	[Range(0.0f, 2.0f)]
-	public float size = 0.5f;
-
+	[Range(0, 20)]
+	public int SampleCount = 20;
+	[Range(0, 20)]
+	public int _Test = 20;
+	[Range(-1, 1)]
+	public float _Radius = 0.5f;
+	
+	[Range(-10, 10)]
+	public float _FloatTest = 0.5f;
+	
 	private Matrix4x4 previousViewProjectionMatrix;
 	
 	void OnEnable() {
@@ -37,10 +44,14 @@ public class SSAOWithDepthTexture : PostEffectsBase {
 	
 	void OnRenderImage (RenderTexture src, RenderTexture dest) {
 		if (material != null) {
-			material.SetFloat("_Size", size);
-
+			material.SetFloat("_SampleCount", SampleCount);
+			material.SetFloat("_Test", _Test);
+			material.SetFloat("_Radius", _Radius);
+			material.SetFloat("_FloatTest", _FloatTest);
+			
 			material.SetMatrix("_PreviousViewProjectionMatrix", previousViewProjectionMatrix);
 			Matrix4x4 currentViewProjectionMatrix = camera.projectionMatrix * camera.worldToCameraMatrix;
+			material.SetMatrix("_CurrentViewProjectionMatrix", previousViewProjectionMatrix);
 			Matrix4x4 currentViewProjectionInverseMatrix = currentViewProjectionMatrix.inverse;
 			material.SetMatrix("_CurrentViewProjectionInverseMatrix", currentViewProjectionInverseMatrix);
 			previousViewProjectionMatrix = currentViewProjectionMatrix;

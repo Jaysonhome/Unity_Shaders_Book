@@ -35,6 +35,33 @@ public class MontcaloSampleTest : MonoBehaviour
         float sinTheta = Mathf.Sqrt(1.0f - cosTheta * cosTheta);
         return new Vector3(Mathf.Cos(phi) * sinTheta, Mathf.Sin(phi) * sinTheta, cosTheta);
     }
+    
+    Vector2 UniformSampleDisk( Vector2 E )
+    {
+        float Theta = 2 * PI * E.x;
+        float Radius = Mathf.Sqrt( E.y );
+        return Radius *new Vector2( Mathf.Cos( Theta ), Mathf.Sin( Theta ) );
+    }
+    Vector4 UniformSampleSphere(Vector2 E) {
+        float Phi = 2 * PI * E.x;
+        float CosTheta = 1 - 2 * E.y;
+        float SinTheta = Mathf.Sqrt(1 - CosTheta * CosTheta);
+
+        Vector3 L = new Vector3( SinTheta * Mathf.Cos(Phi), SinTheta * Mathf.Sin(Phi), CosTheta );
+        float PDF = 1 / (4 * PI);
+
+        return new Vector4(L.x,L.y,L.z, PDF);
+    }
+    Vector3 UniformSampleHemisphere(Vector2 E) {
+        float Phi = 2 * PI * E.x;
+        float CosTheta = E.y;
+        float SinTheta = Mathf.Sqrt(1 - CosTheta * CosTheta);
+
+        Vector3 L =new Vector3( SinTheta * Mathf.Cos(Phi), SinTheta * Mathf.Sin(Phi), CosTheta );
+        // float PDF = 1.0 / (2 * UNITY_PI);
+
+        return L;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -63,6 +90,7 @@ public class MontcaloSampleTest : MonoBehaviour
             Vector2 hammersleyVec = Hammersley((uint)i,(uint)SampleNum);
             //用vec3的结果直接在球面上实现均匀采样
             Vector3 hemisphereVec = hemisphereSample_cos(hammersleyVec.x ,hammersleyVec.y);
+            hemisphereVec = UniformSampleDisk(hammersleyVec);
 
             //考虑3D球面
             s.position = hemisphereVec; 

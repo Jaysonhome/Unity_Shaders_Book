@@ -62,7 +62,7 @@ Shader "Unity Shaders Book/Common/JayOriBumped Diffuse" {
 				float4 TtoW1 : TEXCOORD2;  
 				float4 TtoW2 : TEXCOORD3;
 				SHADOW_COORDS(4)
-				// float4 sm_coord : TEXCOORD5;
+				float4 cus_pos : TEXCOORD5;
 			};
 			
 			float transferDepth(float z)
@@ -92,9 +92,9 @@ Shader "Unity Shaders Book/Common/JayOriBumped Diffuse" {
 				o.TtoW1 = float4(worldTangent.y, worldBinormal.y, worldNormal.y, worldPos.y);
 				o.TtoW2 = float4(worldTangent.z, worldBinormal.z, worldNormal.z, worldPos.z);  
 				
-				
 				TRANSFER_SHADOW(o);
-				// o.sm_coord = mul(_ShadowMapVP,mul(unity_ObjectToWorld,v.vertex));
+				o.cus_pos = mul(unity_MatrixMVP,mul(unity_ObjectToWorld,v.vertex));
+				o.cus_pos= o.pos;
 				return o;
 			}
 			
@@ -113,7 +113,10 @@ Shader "Unity Shaders Book/Common/JayOriBumped Diffuse" {
 			 	fixed3 diffuse = _LightColor0.rgb * albedo * max(0, dot(bump, lightDir));
 				
 				UNITY_LIGHT_ATTENUATION(atten, i, worldPos);
-  
+
+				// fixed4 p = i.cus_pos;
+				// p.xy = 0.5*p.xy+0.5;
+				// return fixed4(p.y,0,0, 1.0);
 				return fixed4(ambient + diffuse * atten, 1.0);
 			}
 			ENDCG
