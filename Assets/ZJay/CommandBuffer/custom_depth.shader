@@ -39,8 +39,7 @@
             //
             float4 frag (v2f i) : SV_Target
             {
-                //todo 为什么game窗口黑色
-                float4 col = float4(i.posWorld.zzz,1); 
+                float4 col = float4(i.pos.zzz,1); 
                 return col;
             }
             ENDCG

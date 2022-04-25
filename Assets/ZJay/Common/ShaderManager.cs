@@ -10,5 +10,7 @@ public class ShaderManager : MonoBehaviour
     public struct GlobalShaderIds
     {
         public static readonly int CustomDepthTexture = Shader.PropertyToID("_CustomDepthTexture");
+        // public static readonly int CustomDepthTexture = Shader.PropertyToID("_CustomDepthTexture");
+        
     }
 }

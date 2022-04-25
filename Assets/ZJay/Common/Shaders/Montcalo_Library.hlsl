@@ -94,7 +94,7 @@ uint HaltonSequence(uint Index, uint base = 3)
 	}
 	return result;
 }
-
+//2D (0~1 , 0~1)的均匀分布
 float2 Hammersley(uint a) {
 	return float2(RadicalInverseSpecialized2(a), RadicalInverseSpecialized3(a));
 }

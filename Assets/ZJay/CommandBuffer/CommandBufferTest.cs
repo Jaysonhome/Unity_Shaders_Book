@@ -27,7 +27,7 @@ public class CommandBufferTest : MonoBehaviour
         cmd = new CommandBuffer();
         cmdMaterial = new Material(m_shader);
         // if(rt==null)
-        rt = new RenderTexture(Screen.width/2, Screen.height/2,
+        rt = new RenderTexture(Screen.width, Screen.height,
             16, RenderTextureFormat.Depth);
         
         cmd.name = "jjjjjjjj depth Texture cmd buffer";
@@ -36,10 +36,11 @@ public class CommandBufferTest : MonoBehaviour
         cmd.SetRenderTarget(rt);
         cmd.ClearRenderTarget(true,true,Color.clear);
         
-        var objs = GameObject.FindObjectsOfType(typeof(Renderer));
-        foreach (var o in objs)
+        var gos = GameObject.FindObjectsOfType(typeof(GameObject));
+        foreach (var _go in gos)
         {
-           var render = o as Renderer;
+           var go = _go as GameObject;
+           var render = go.GetComponent<Renderer>();
            if(render==null)
                continue;
             cmd.DrawRenderer(render,cmdMaterial);//todo
@@ -50,7 +51,6 @@ public class CommandBufferTest : MonoBehaviour
         // cmd.Blit(BuiltinRenderTextureType.CurrentActive,
         //     ShaderManager.GlobalShaderIds.CustomDepthTexture);
         Shader.SetGlobalTexture(ShaderManager.GlobalShaderIds.CustomDepthTexture,rt);
-           
     }
 
     public void RemoveCommandBuffer()

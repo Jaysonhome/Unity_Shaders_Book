@@ -51,7 +51,6 @@ Shader "Unity Shaders Book/Chapter 12/Brightness Saturation And Contrast" {
 				// Apply contrast
 				fixed3 avgColor = fixed3(0.5, 0.5, 0.5);
 				finalColor = lerp(avgColor, finalColor, _Contrast);
-				
 				return fixed4(finalColor, renderTex.a);  
 			}  
 			  

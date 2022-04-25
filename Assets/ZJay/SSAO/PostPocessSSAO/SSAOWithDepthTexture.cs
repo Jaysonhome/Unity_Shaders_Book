@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Serialization;
 
-public class MotionBlurWithDepthTexture : PostEffectsBase {
+public class SSAOWithDepthTexture : PostEffectsBase {
 
-	public Shader motionBlurShader;
-	private Material motionBlurMaterial = null;
+	public Shader ssaoShader;
+	private Material ssaoMaterial = null;
 
 	public Material material {  
 		get {
-			motionBlurMaterial = CheckShaderAndCreateMaterial(motionBlurShader, motionBlurMaterial);
-			return motionBlurMaterial;
+			ssaoMaterial = CheckShaderAndCreateMaterial(ssaoShader, ssaoMaterial);
+			return ssaoMaterial;
 		}  
 	}
 
@@ -23,23 +24,36 @@ public class MotionBlurWithDepthTexture : PostEffectsBase {
 		}
 	}
 
-	[Range(0.0f, 1.0f)]
-	public float blurSize = 0.5f;
-
+	[Range(0, 20)]
+	public int _SampleCount = 20;
+	[Range(0, 1)]
+	public float _Radius = 0.5f;
+	[Range(-1, 1)]
+	public float _FloatTest = 0.5f;
+	
 	private Matrix4x4 previousViewProjectionMatrix;
 	
 	void OnEnable() {
-		camera.depthTextureMode |= DepthTextureMode.Depth;
+		// camera.depthTextureMode |= DepthTextureMode.Depth;
 
+		camera.depthTextureMode |= DepthTextureMode.DepthNormals;
 		previousViewProjectionMatrix = camera.projectionMatrix * camera.worldToCameraMatrix;
 	}
+	 
 
+	private void OnDisable()
+	{
+		camera.depthTextureMode &= ~DepthTextureMode.DepthNormals;
+	}
 	void OnRenderImage (RenderTexture src, RenderTexture dest) {
 		if (material != null) {
-			material.SetFloat("_BlurSize", blurSize);
+			material.SetFloat("_SampleCount", _SampleCount);
+			material.SetFloat("_Radius", _Radius);
+			material.SetFloat("_FloatTest", _FloatTest);
 
-			material.SetMatrix("_PreviousViewProjectionMatrix", previousViewProjectionMatrix);
+			// material.SetMatrix("_PreviousViewProjectionMatrix", previousViewProjectionMatrix);
 			Matrix4x4 currentViewProjectionMatrix = camera.projectionMatrix * camera.worldToCameraMatrix;
+			material.SetMatrix("_CurrentViewProjectionMatrix", previousViewProjectionMatrix);
 			Matrix4x4 currentViewProjectionInverseMatrix = currentViewProjectionMatrix.inverse;
 			material.SetMatrix("_CurrentViewProjectionInverseMatrix", currentViewProjectionInverseMatrix);
 			previousViewProjectionMatrix = currentViewProjectionMatrix;
