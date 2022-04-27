@@ -1,6 +1,10 @@
 ﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
+//Key Note:
+//1.reflect(-o.worldViewDir, o.worldNormal);
+//2.texCUBE采样cubeMap，而且传方向即可，不需要归一化
+
 Shader "Unity Shaders Book/Chapter 10/Reflection" {
 	Properties {
 		_Color ("Color Tint", Color) = (1, 1, 1, 1)
